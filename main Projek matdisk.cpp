@@ -1,81 +1,53 @@
 #include <iostream>
 #include <string>
-#include <vector> // Ini kunci biar gak ada batasan barang
-#include <iomanip> // Biar output angka lebih rapi
 
 using namespace std;
 
 int main() {
-    // Pake vector supaya jumlah barang bebas (tanpa batasan)
-    vector<string> namaBarang;
-    vector<int> hargaBarang;
-    vector<int> jumlahBeli;
-    vector<int> subTotal;
+    // 1. Deklarasi Variabel dan Array
+    const int MAX = 50;
+    string namaBarang[MAX];
+    int hargaBarang[MAX], jumlahBeli[MAX], subTotal[MAX];
+    int n, totalBayar = 0;
 
-    string inputNama;
-    int inputHarga, inputJumlah, n;
-    int totalKeseluruhan = 0;
-
-    cout << "===============================================" << endl;
-    cout << "       PROGRAM KASIR MINIMARKET (NIM-4)        " << endl;
-    cout << "===============================================" << endl;
-    
-    cout << "Mau input berapa jenis barang? : ";
+    cout << "=== SISTEM KASIR MINIMARKET ===\n";
+    cout << "Masukkan jumlah jenis item: ";
     cin >> n;
 
-    // Perulangan (Looping) sesuai input user
+    // 2. Perulangan (For) untuk Input Data
     for (int i = 0; i < n; i++) {
-        cout << "\nData Barang Ke-" << i + 1 << endl;
+        cout << "\nItem ke-" << i + 1 << endl;
         cout << "Nama Barang  : ";
-        cin.ignore(); // Bersihin buffer biar getline lancar
-        getline(cin, inputNama);
+        cin.ignore(); // Biar input string lancar
+        getline(cin, namaBarang[i]);
         cout << "Harga Satuan : ";
-        cin >> inputHarga;
+        cin >> hargaBarang[i];
         cout << "Jumlah Beli  : ";
-        cin >> inputJumlah;
+        cin >> jumlahBeli[i];
 
-        // Masukin data ke dalem vector
-        namaBarang.push_back(inputNama);
-        hargaBarang.push_back(inputHarga);
-        jumlahBeli.push_back(inputJumlah);
-        
-        int hitungSub = inputHarga * inputJumlah;
-        subTotal.push_back(hitungSub);
-        
-        totalKeseluruhan += hitungSub;
+        // Hitung subtotal per item
+        subTotal[i] = hargaBarang[i] * jumlahBeli[i];
+        totalBayar += subTotal[i];
     }
 
-    // Output Struk Pembayaran
-    cout << "\n\n===============================================" << endl;
-    cout << "               STRUK PEMBAYARAN                " << endl;
-    cout << "===============================================" << endl;
-    cout << left << setw(4) << "No" << setw(15) << "Barang" << setw(10) << "Harga" << setw(5) << "Qty" << "Total" << endl;
-    cout << "-----------------------------------------------" << endl;
-
-    for (int i = 0; i < n; i++) {
-        cout << left << setw(4) << i + 1 
-             << setw(15) << namaBarang[i] 
-             << setw(10) << hargaBarang[i] 
-             << setw(5) << jumlahBeli[i] 
-             << subTotal[i] << endl;
-    }
-
-    cout << "-----------------------------------------------" << endl;
-    cout << "Total Belanja : Rp" << totalKeseluruhan << endl;
-
-    // Percabangan (If) - Logika Diskon
+    // 3. Percabangan (If) untuk Diskon
     int diskon = 0;
-    if (totalKeseluruhan >= 100000) {
-        diskon = totalKeseluruhan * 0.1; // Diskon 10%
-        cout << "Diskon (10%)  : Rp" << diskon << endl;
-    } else {
-        cout << "Diskon        : Rp0 (Belanja min. 100rb buat diskon)" << endl;
+    if (totalBayar >= 100000) {
+        diskon = totalBayar * 0.1; // Diskon 10% jika belanja >= 100rb
     }
 
-    int bayarAkhir = totalKeseluruhan - diskon;
-    cout << "TOTAL BAYAR   : Rp" << bayarAkhir << endl;
-    cout << "===============================================" << endl;
-    cout << "        Terima Kasih Atas Kunjungannya!        " << endl;
+    // 4. Menampilkan Output
+    cout << "\n===============================";
+    cout << "\n        STRUK BELANJA          ";
+    cout << "\n===============================\n";
+    for (int i = 0; i < n; i++) {
+        cout << namaBarang[i] << " x" << jumlahBeli[i] << " = Rp" << subTotal[i] << endl;
+    }
+    cout << "-------------------------------";
+    cout << "\nTotal Kotor : Rp" << totalBayar;
+    cout << "\nDiskon      : Rp" << diskon;
+    cout << "\nTotal Bayar : Rp" << totalBayar - diskon;
+    cout << "\n===============================\n";
 
     return 0;
 }
